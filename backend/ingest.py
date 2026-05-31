@@ -1,9 +1,12 @@
+import os
+
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct
 from sentence_transformers import SentenceTransformer
 import fitz  # pymupdf
 import docx
 import uuid
+import os
 
 client = QdrantClient("http://localhost:6333")
 model = SentenceTransformer("paraphrase-multilingual-MiniLM-L12-v2")
@@ -55,7 +58,7 @@ def ingest_file(path: str):
         PointStruct(
             id=str(uuid.uuid4()),
             vector=v,
-            payload={"text": c}
+            payload={"text": c, "source": os.path.basename(path)}
         )
         for v, c in zip(vectors, chunks)
     ]
